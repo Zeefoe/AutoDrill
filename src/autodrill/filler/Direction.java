@@ -17,11 +17,11 @@ public enum Direction {
     }
 
     public int primaryAxis(Point2 p) {
-        return p.x * this.p.x + p.y * this.p.y;
+        return (int) (p.x * this.p.x + p.y * this.p.y);
     }
 
     public int secondaryAxis(Point2 p) {
-        return p.x * this.p.y + p.y * this.p.x;
+        return (int) (p.x * this.p.y + p.y * this.p.x);
     }
 
     public static Direction getOpposite(Direction direction) {

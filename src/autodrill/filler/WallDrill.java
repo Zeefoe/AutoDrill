@@ -29,7 +29,7 @@ public class WallDrill {
         Point2 offsetOpposite = getDirectionOffset(directionOpposite, drill);
         for (Tile tile1 : tiles) {
             for (int i = 0; i < drill.range; i++) {
-                Tile boreTile = tile1.nearby((i + 1) * -direction.p.x + offset.x, (i + 1) * -direction.p.y + offset.y);
+                Tile boreTile = tile1.nearby((int) ((i + 1) * -direction.p.x + offset.x), (int) ((i + 1) * -direction.p.y + offset.y));
                 if (boreTile == null) continue;
 
                 BuildPlan buildPlan = new BuildPlan(boreTile.x, boreTile.y, direction.r, drill);
@@ -59,9 +59,9 @@ public class WallDrill {
         Seq<Tile> ductTiles = new Seq<>();
         for (Tile boreTile : boreTiles) {
             for (int i = -(drill.size - 1) / 2; i <= drill.size / 2; i++) {
-                Tile ductTile = boreTile.nearby(new Point2(
-                        -offsetOpposite.x + directionOpposite.p.x + (i * Math.abs(direction.p.y)),
-                        -offsetOpposite.y + directionOpposite.p.y + (i * Math.abs(direction.p.x))));
+                Tile ductTile = boreTile.nearby(
+                        (int) (-offsetOpposite.x + directionOpposite.p.x + (i * Math.abs(direction.p.y))),
+                        (int) (-offsetOpposite.y + directionOpposite.p.y + (i * Math.abs(direction.p.x))));
                 if (ductTile == null) continue;
 
                 ductTiles.add(ductTile);
@@ -146,8 +146,8 @@ public class WallDrill {
         Tile outerMost = boreTiles.max(t -> -direction.primaryAxis(new Point2(t.x, t.y)));
         for (Tile boreTile : boreTiles) {
             Tile beamNodeTile = Vars.world.tile(
-                    Math.abs(direction.p.x) * outerMost.x + Math.abs(direction.p.y) * boreTile.x - offsetOpposite.x + directionOpposite.p.x * 2,
-                    Math.abs(direction.p.y) * outerMost.y + Math.abs(direction.p.x) * boreTile.y - offsetOpposite.y + directionOpposite.p.y * 2);
+                    (int) (Math.abs(direction.p.x) * outerMost.x + Math.abs(direction.p.y) * boreTile.x - offsetOpposite.x + directionOpposite.p.x * 2),
+                    (int) (Math.abs(direction.p.y) * outerMost.y + Math.abs(direction.p.x) * boreTile.y - offsetOpposite.y + directionOpposite.p.y * 2));
             if (beamNodeTile == null) continue;
 
             BuildPlan buildPlan = new BuildPlan(beamNodeTile.x, beamNodeTile.y, 0, Blocks.beamNode);
@@ -175,8 +175,9 @@ public class WallDrill {
         queue.addLast(tile);
 
         Item sourceItem = tile.wallDrop();
+        if (sourceItem == null) return tiles;
 
-        int maxTiles = (int) (Core.settings.getInt(bundle.get("auto-drill.settings.max-tiles")) * 0.25f);
+        int maxTiles = (int) (Core.settings.getInt("max-tiles", 50) * 0.25f);
 
         while (!queue.isEmpty() && tiles.size < maxTiles) {
             Tile currentTile = queue.removeFirst();
@@ -190,7 +191,7 @@ public class WallDrill {
                             Tile neighbor = currentTile.nearby(x, y);
                             if (neighbor == null) continue;
 
-                            Tile nearby = neighbor.nearby(new Point2(-direction.p.x, -direction.p.y));
+                            Tile nearby = neighbor.nearby((int) -direction.p.x, (int) -direction.p.y);
                             if (!visited.contains(neighbor) && nearby != null && !nearby.solid()) {
                                 queue.addLast(neighbor);
                             }
