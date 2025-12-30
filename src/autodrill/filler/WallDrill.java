@@ -27,8 +27,9 @@ public class WallDrill {
         Direction directionOpposite = Direction.getOpposite(direction);
         Point2 offset = getDirectionOffset(direction, drill);
         Point2 offsetOpposite = getDirectionOffset(directionOpposite, drill);
+        int wallDrillOffset = Core.settings.getInt("wall-drill-offset", 0);
         for (Tile tile1 : tiles) {
-            for (int i = 0; i < drill.range; i++) {
+            for (int i = wallDrillOffset; i < drill.range; i++) {
                 Tile boreTile = tile1.nearby((int) ((i + 1) * -direction.p.x + offset.x), (int) ((i + 1) * -direction.p.y + offset.y));
                 if (boreTile == null) continue;
 

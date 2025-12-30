@@ -117,6 +117,8 @@ public class AutoDrill extends Mod {
             settings.sliderPref("airblast-drill-max-tiles", 100, 25, 500, 25, value -> value + "").title = bundle.get("auto-drill.settings.max-tiles");
             settings.sliderPref("airblast-drill-min-ores", 9, 1, 16, 1, value -> value + "").title = bundle.get("auto-drill.settings.min-ores");
 
+            settings.sliderPref("wall-drill-offset", 0, 0, 4, 1, value -> value + "").title = bundle.get("auto-drill.settings.wall-drill-offset");
+
             settings.pref(new DividerSetting());
             settings.pref(new DescriptionSetting(bundle.get("auto-drill.settings.optimization-quality-desc")));
             settings.sliderPref(bundle.get("auto-drill.settings.optimization-quality"), 2, 1, 10, 1, i -> i + "");
